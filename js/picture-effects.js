@@ -28,7 +28,8 @@
 При переключении эффектов, уровень насыщенности сбрасывается до начального значения (100%): слайдер, CSS-стиль изображения и значение поля должны обновляться.
 */
 const previewImage = document.querySelector('.img-upload__preview img');
-
+const sliderElement = document.querySelector('.effect-level__slider');
+const effectsList = document.querySelector('.effects__list');
 const effectLevel = document.querySelector('.effect-level__value');
 
 const EFFECTS = [
@@ -79,69 +80,70 @@ const EFFECTS = [
     unit: '',
   },
 ];
-
 const DEFAULT_EFFECT = EFFECTS[0];
-const sliderElement = document.querySelector('.effect-level__slider');
 
-noUiSlider.create(sliderElement, {
-  range: {
-    min: DEFAULT_EFFECT.min,
-    max: DEFAULT_EFFECT.max,
-  },
-  start: DEFAULT_EFFECT.max,
-  step: 1,
-  connect: 'lower',
-});
+function changePreviewImageEffect () {
+  let chosenEffect = DEFAULT_EFFECT;
+  sliderElement.classList.add('hidden');
+  previewImage.style = '';
+  previewImage.className = '';
 
-const form = document.querySelector('.img-upload__form');
-let chosenEffect = DEFAULT_EFFECT;
-const isDefault = () => chosenEffect === DEFAULT_EFFECT;
-
-const updateSlider = () => {
-  sliderElement.classList.remove('hidden');
-  sliderElement.noUiSlider.updateOptions({
+  noUiSlider.create(sliderElement, {
     range: {
-      min: chosenEffect.min,
-      max: chosenEffect.max,
+      min: DEFAULT_EFFECT.min,
+      max: DEFAULT_EFFECT.max,
     },
-    step: chosenEffect.step,
-    start: chosenEffect.max,
+    start: DEFAULT_EFFECT.max,
+    step: 1,
+    connect: 'lower',
   });
 
-  if (isDefault()) {
-    sliderElement.classList.add('hidden');
-  }
-};
+  const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
+  const updateSlider = () => {
+    sliderElement.classList.remove('hidden');
+    sliderElement.noUiSlider.updateOptions({
+      range: {
+        min: chosenEffect.min,
+        max: chosenEffect.max,
+      },
+      step: chosenEffect.step,
+      start: chosenEffect.max,
+    });
 
-const onFormChange = (evt) => {
-  if (!evt.target.classList.contains('effects__radio')) {
-    return;
-  }
-  chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
-  updateSlider();
-};
-form.addEventListener('change', onFormChange);
+    if (isDefault()) {
+      sliderElement.classList.add('hidden');
+    }
+  };
 
-sliderElement.noUiSlider.on('update', () => {
-  effectLevel.value = sliderElement.noUiSlider.get();
-});
+  const onFormChange = (evt) => {
+    if (!evt.target.classList.contains('effects__radio')) {
+      return;
+    }
+    chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
+    updateSlider();
+  };
+  effectsList.addEventListener('change', onFormChange);
 
-const onSliderUpdate = () => {
-  previewImage.style.filter = 'none';
-  previewImage.className = '';
-  effectLevel.value = '';
-  if (isDefault()) {
-    return;
-  }
-  const sliderValue = sliderElement.noUiSlider.get();
-  previewImage.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
-  previewImage.classList.add(`effects__preview--${chosenEffect.name}`);
-  effectLevel.value = sliderValue;
-};
+  sliderElement.noUiSlider.on('update', () => {
+    effectLevel.value = sliderElement.noUiSlider.get();
+  });
 
-sliderElement.noUiSlider.on('update', onSliderUpdate);
+  const onSliderUpdate = () => {
+    previewImage.style.filter = 'none';
+    previewImage.className = '';
+    effectLevel.value = '';
+    if (isDefault()) {
+      return;
+    }
+    const sliderValue = sliderElement.noUiSlider.get();
+    previewImage.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
+    previewImage.classList.add(`effects__preview--${chosenEffect.name}`);
+    effectLevel.value = sliderValue;
+  };
 
+  sliderElement.noUiSlider.on('update', onSliderUpdate);
+}
 
 function scalingPreviewImage () {
   const scaleBigger = document.querySelector('.scale__control--bigger');
@@ -153,13 +155,12 @@ function scalingPreviewImage () {
   const SCALE_STEP = 25;
 
   let scale = 100;
-  setScaleValue();
-
+  
   function setScaleValue () {
     scaleValue.value = `${scale}%`;
     previewImage.style.transform = `scale(${scale/100})`;
   }
-
+  setScaleValue();
   const onBiggerScaleClick = () => {
     if(scale < SCALE_MAX) {
       scale += SCALE_STEP;
@@ -178,4 +179,4 @@ function scalingPreviewImage () {
 }
 
 
-export {scalingPreviewImage};
+export {scalingPreviewImage, changePreviewImageEffect};

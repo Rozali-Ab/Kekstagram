@@ -18,6 +18,9 @@
  }
  .noUi-target {
    position: relative;
+   width: calc(100% - 20px);
+   height: 5px;
+   transform: translateY(2px);
  }
  .noUi-base,
  .noUi-connects {
