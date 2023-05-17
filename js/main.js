@@ -1,4 +1,4 @@
-import {renderPictures} from './render-pictures.js';
+import {renderPictures} from './gallery.js';
 import {uploadPicture} from './upload-picture.js';
 
 renderPictures();

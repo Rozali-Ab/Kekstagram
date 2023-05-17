@@ -32,6 +32,8 @@
 
 Поля, не перечисленные в техзадании, но существующие в разметке, особой валидации не требуют.*/
 import {isEscapeKey} from './util.js';
+import {scalingPreviewImage} from './picture-effects.js';
+
 const form = document.querySelector('form.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const fileField = document.querySelector('#upload-file');
@@ -55,6 +57,7 @@ const showModal = () => {
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
   cancelButton.addEventListener('click', onCancelButtonClick);
+  scalingPreviewImage();
 };
 
 const closeModal = () => {
