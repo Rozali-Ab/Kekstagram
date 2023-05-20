@@ -28,35 +28,41 @@
 */
 
 
-const getData = (onSuccess, onError) => {
-  fetch('https://25.javascript.pages.academy/kekstagram/data')
-    .then((response) => response.json())
-    .then((pictures) => {
-      onSuccess(pictures);
-    })
-    .catch(() => {
-      onError();
-    });
+const getData = async (onSuccess, onFail) => {
+  try {
+    const response = await fetch(
+      'https://25.javascript.pages.academy/kekstagram/data'
+    );
+
+    if (!response.ok) {
+      throw new Error('Не удалось загрузить фотографии');
+    }
+
+    const offers = await response.json();
+    onSuccess(offers);
+  } catch (error) {
+    onFail(error.message);
+  }
 };
 
-const sendData = (onSuccess, onFail, body) => {
-  fetch(
-    'https://25.javascript.pages.academy/kekstagram',
-    {
-      method: 'POST',
-      body,
-    },
-  )
-    .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        onFail();
+const sendData = async (onSuccess, onFail, body) => {
+  try {
+    const response = await fetch(
+      'https://25.javascript.pages.academy/kekstagram',
+      {
+        method: 'POST',
+        body,
       }
-    })
-    .catch(() => {
-      onFail();
-    });
+    );
+
+    if (!response.ok) {
+      throw new Error('Не удалось отправить фото. Попробуйте ещё раз');
+    }
+
+    onSuccess();
+  } catch (error) {
+    onFail(error.message);
+  }
 };
 
 

@@ -31,9 +31,8 @@
 Для валидации хэш-тегов вам придётся вспомнить, как работать с массивами. Набор хэш-тегов можно превратить в массив, воспользовавшись методом .split(). Он разбивает строки на массивы. После этого, вы можете написать цикл, который будет ходить по полученному массиву и проверять каждый из хэш-тегов на предмет соответствия ограничениям. Если хотя бы один из тегов не проходит нужных проверок, показывать сообщение об ошибке.
 
 Поля, не перечисленные в техзадании, но существующие в разметке, особой валидации не требуют.*/
-import {isEscapeKey, showSuccessModal, showErrorModal} from './util.js';
+import {isEscapeKey} from './util.js';
 import {scalingPreviewImage, changePreviewImageEffect} from './picture-effects.js';
-import {sendData} from './api.js';
 
 const form = document.querySelector('form.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -59,7 +58,6 @@ const showModal = () => {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
-  cancelButton.addEventListener('click', onCancelButtonClick);
   scalingPreviewImage();
   changePreviewImageEffect();
 };
@@ -80,10 +78,6 @@ function onEscKeyDown (evt) {
     evt.preventDefault();
     closeModal();
   }
-}
-
-function onCancelButtonClick () {
-  closeModal();
 }
 
 
@@ -128,33 +122,20 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const setPictureFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
+const setPictureFormSubmit = (cb) => {
+  form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
-      sendData (
-        () => {
-          closeModal();
-          unblockSubmitButton();
-          showSuccessModal();
-        },
-        () => {
-          closeModal();
-          showErrorModal();
-          unblockSubmitButton();
-        },
-        new FormData(evt.target),
-      );
+      await cb(new FormData(form));
+      unblockSubmitButton();
     }
   });
 };
 
+fileField.addEventListener('change', showModal);
+cancelButton.addEventListener('click', closeModal);
 
-const onDownloadClick = () => {
-  fileField.addEventListener('change', showModal);
-};
-
-export{onDownloadClick, setPictureFormSubmit};
+export{setPictureFormSubmit, closeModal};

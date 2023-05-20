@@ -1,11 +1,22 @@
-import  {getData} from './api.js';
-import {onDownloadClick, setPictureFormSubmit} from './upload-picture.js';
+import  {getData, sendData} from './api.js';
+import {setPictureFormSubmit, closeModal} from './upload-picture.js';
 import {renderPictures} from './gallery.js';
-import {showMainErrorModal} from './util.js';
-onDownloadClick();
+import {showSuccessModal, showErrorModal, showMainErrorModal} from './util.js';
+
+const onSendDataSuccess = () => {
+  closeModal();
+  showSuccessModal();
+};
+
+const onSendDataError = () => {
+  closeModal();
+  showErrorModal();
+};
 
 getData(renderPictures, showMainErrorModal);
 
-setPictureFormSubmit();
+setPictureFormSubmit(async (data) => {
+  await sendData(onSendDataSuccess, onSendDataError, data);
+});
 //npm run start
 

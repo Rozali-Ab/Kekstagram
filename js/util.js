@@ -30,8 +30,8 @@ const getRandomArrayElement = (names) =>  names[getPositiveNumber(0, names.lengt
 // нажата ли Esc для EventListener
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const successSection = document.querySelector('#success').content;
-const errorSection = document.querySelector('#error').content;
+const successSection = document.querySelector('#success').content.querySelector('.success');
+const errorSection = document.querySelector('#error').content.querySelector('.error');
 
 function hideModal () {
   const messageElement = document.querySelector('.success') || document.querySelector('.error');
@@ -42,14 +42,14 @@ function hideModal () {
 }
 const showSuccessModal = () => {
   document.body.append(successSection);
-  document.body.querySelector('.success__button').addEventListener('click', hideModal);
+  successSection.querySelector('.success__button').addEventListener('click', hideModal);
   document.body.addEventListener('keydown', onEscDown);
   document.body.addEventListener('click', onBodyClick);
 };
 
 const showErrorModal = () => {
   document.body.append(errorSection);
-  document.body.querySelector('.error__button').addEventListener('click', hideModal);
+  errorSection.querySelector('.error__button').addEventListener('click', hideModal);
   document.body.addEventListener('keydown', onEscDown);
   document.body.addEventListener('click', onBodyClick);
 };
