@@ -116,14 +116,14 @@ function changePreviewImageEffect () {
     }
   };
 
-  const onFormChange = (evt) => {
+  const onEffectsListChange = (evt) => {
     if (!evt.target.classList.contains('effects__radio')) {
       return;
     }
     chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
     updateSlider();
   };
-  effectsList.addEventListener('change', onFormChange);
+  effectsList.addEventListener('change', onEffectsListChange);
 
   sliderElement.noUiSlider.on('update', () => {
     effectLevel.value = sliderElement.noUiSlider.get();
@@ -155,7 +155,7 @@ function scalingPreviewImage () {
   const SCALE_STEP = 25;
 
   let scale = 100;
-  
+
   function setScaleValue () {
     scaleValue.value = `${scale}%`;
     previewImage.style.transform = `scale(${scale/100})`;

@@ -1,7 +1,11 @@
+import  {getData} from './api.js';
+import {onDownloadClick, setPictureFormSubmit} from './upload-picture.js';
 import {renderPictures} from './gallery.js';
-import {uploadPicture} from './upload-picture.js';
+import {showMainErrorModal} from './util.js';
+onDownloadClick();
 
-renderPictures();
-uploadPicture();
+getData(renderPictures, showMainErrorModal);
 
+setPictureFormSubmit();
 //npm run start
+

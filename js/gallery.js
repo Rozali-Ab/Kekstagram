@@ -11,15 +11,12 @@
 Отрисуйте сгенерированные DOM-элементы в блок .pictures. Для вставки элементов используйте DocumentFragment.
 
 Подключите модуль в проект.*/
-import {getPictures} from './data.js';
+
 import {showBigPicture} from './big-picture.js';
 
-const renderPictures = () => {
+const renderPictures = (pictureList) => {
   const template = document.querySelector('#picture').content.querySelector('.picture');
-
   const picturesSection = document.querySelector('.pictures');
-
-  const pictureList = getPictures();
 
   const pictureListFragment = document.createDocumentFragment();
 

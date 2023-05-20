@@ -130,9 +130,9 @@ const showBigPicture = (picture) => {
   if (comments.length > 0) {
     renderComments(picture.comments);
   }
+  closeButton.addEventListener('click', closePicture);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
 
-closeButton.addEventListener('click', closePicture);
-commentsLoader.addEventListener('click', onCommentsLoaderClick);
 
 export {showBigPicture};

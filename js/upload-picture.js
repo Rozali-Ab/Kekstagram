@@ -31,8 +31,9 @@
 Для валидации хэш-тегов вам придётся вспомнить, как работать с массивами. Набор хэш-тегов можно превратить в массив, воспользовавшись методом .split(). Он разбивает строки на массивы. После этого, вы можете написать цикл, который будет ходить по полученному массиву и проверять каждый из хэш-тегов на предмет соответствия ограничениям. Если хотя бы один из тегов не проходит нужных проверок, показывать сообщение об ошибке.
 
 Поля, не перечисленные в техзадании, но существующие в разметке, особой валидации не требуют.*/
-import {isEscapeKey} from './util.js';
+import {isEscapeKey, showSuccessModal, showErrorModal} from './util.js';
 import {scalingPreviewImage, changePreviewImageEffect} from './picture-effects.js';
+import {sendData} from './api.js';
 
 const form = document.querySelector('form.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -40,11 +41,13 @@ const fileField = document.querySelector('#upload-file');
 const cancelButton = document.querySelector('#upload-cancel');
 const hashtagField = form.querySelector('.text__hashtags');
 const descriptionField = form.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
 
 const MAX_HASHTAG_COUNT = 5;
 const MIN_HASHTAG_LENGTH = 2;
 const MAX_HASHTAG_LENGTH = 20;
 const UNVALID_SYMBOLS = /[^a-zA-Z0-9а-яА-ЯёЁ]/g;
+
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__element',
@@ -83,6 +86,7 @@ function onCancelButtonClick () {
   closeModal();
 }
 
+
 const startsWithHash = (string) => string[0] === '#';
 
 const hasValidLength = (string) =>
@@ -108,22 +112,49 @@ const validateTags = (value) => {
   return hasValidCount(tags) && hasUniqueTags(tags) && tags.every(isValidTag);
 };
 
-
 pristine.addValidator(
   hashtagField,
   validateTags,
   'Неправильно заполнены хэштеги'
 );
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const setPictureFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData (
+        () => {
+          closeModal();
+          unblockSubmitButton();
+          showSuccessModal();
+        },
+        () => {
+          closeModal();
+          showErrorModal();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
 };
 
 
-const uploadPicture = () => {
-  form.addEventListener('submit', onFormSubmit);
+const onDownloadClick = () => {
   fileField.addEventListener('change', showModal);
 };
 
-export{uploadPicture};
+export{onDownloadClick, setPictureFormSubmit};

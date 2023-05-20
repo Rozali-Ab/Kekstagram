@@ -30,5 +30,52 @@ const getRandomArrayElement = (names) =>  names[getPositiveNumber(0, names.lengt
 // нажата ли Esc для EventListener
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+const successSection = document.querySelector('#success').content;
+const errorSection = document.querySelector('#error').content;
 
-export {getPositiveNumber, checkStringLength, getRandomArrayElement, isEscapeKey};
+function hideModal () {
+  const messageElement = document.querySelector('.success') || document.querySelector('.error');
+  messageElement.remove();
+  document.body.removeEventListener('keydown', onEscDown);
+  document.body.removeEventListener('click', onBodyClick);
+
+}
+const showSuccessModal = () => {
+  document.body.append(successSection);
+  document.body.querySelector('.success__button').addEventListener('click', hideModal);
+  document.body.addEventListener('keydown', onEscDown);
+  document.body.addEventListener('click', onBodyClick);
+};
+
+const showErrorModal = () => {
+  document.body.append(errorSection);
+  document.body.querySelector('.error__button').addEventListener('click', hideModal);
+  document.body.addEventListener('keydown', onEscDown);
+  document.body.addEventListener('click', onBodyClick);
+};
+
+const showMainErrorModal = () => {
+  const error = document.createElement('div');
+  error.textContent = 'Не удалось обновить ленту фотографий, проверьте интернет соединение';
+  error.classList.add('error__msg');
+  document.body.insertAdjacentElement('afterbegin', error);
+};
+
+function onBodyClick(evt) {
+  if (
+    evt.target.closest('.success__inner') ||
+    evt.target.closest('.error__inner')
+  ) {
+    return;
+  }
+  hideModal();
+}
+
+function onEscDown(evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    evt.stopPropagation();
+    hideModal();
+  }
+}
+export {getPositiveNumber, checkStringLength, getRandomArrayElement, isEscapeKey, showSuccessModal, showErrorModal, showMainErrorModal};
