@@ -31,8 +31,8 @@
 Для валидации хэш-тегов вам придётся вспомнить, как работать с массивами. Набор хэш-тегов можно превратить в массив, воспользовавшись методом .split(). Он разбивает строки на массивы. После этого, вы можете написать цикл, который будет ходить по полученному массиву и проверять каждый из хэш-тегов на предмет соответствия ограничениям. Если хотя бы один из тегов не проходит нужных проверок, показывать сообщение об ошибке.
 
 Поля, не перечисленные в техзадании, но существующие в разметке, особой валидации не требуют.*/
-import {isEscapeKey} from './util.js';
-import {scalingPreviewImage, changePreviewImageEffect} from './picture-effects.js';
+import { isEscapeKey } from './util.js';
+import { scalingPreviewImage, changePreviewImageEffect } from './picture-effects.js';
 
 const form = document.querySelector('form.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -80,7 +80,6 @@ function onEscKeyDown (evt) {
   }
 }
 
-
 const startsWithHash = (string) => string[0] === '#';
 
 const hasValidLength = (string) =>
@@ -109,7 +108,7 @@ const validateTags = (value) => {
 pristine.addValidator(
   hashtagField,
   validateTags,
-  'Неправильно заполнены хэштеги'
+  'Неправильно заполнены хэштеги',
 );
 
 const blockSubmitButton = () => {
@@ -138,4 +137,4 @@ const setPictureFormSubmit = (cb) => {
 fileField.addEventListener('change', showModal);
 cancelButton.addEventListener('click', closeModal);
 
-export{setPictureFormSubmit, closeModal};
+export{ setPictureFormSubmit, closeModal };

@@ -34,7 +34,7 @@
 Как связать модули миниатюр и полноразмерного режима?
 Задача не имеет одного верного решения, поэтому будет правильным как использование третьего модуля для связки двух других, так и импорт модуля полноразмерных изображений в модуль миниатюр и дальнейшая работа с интерфейсом этого модуля, addEventListener и замыканиями. Последнее решение похоже на демонстрацию по учебному проекту. А первое — с третьим модулем — более сложное из-за отсутствия примера, но самостоятельное. В качестве третьего модуля можно выбрать точку входа, а можно завести отдельный модуль, например «Галерея». Решение за вами.
 */
-import {isEscapeKey} from './util.js';
+import { isEscapeKey } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const likesCount = bigPicture.querySelector('.likes-count');
@@ -116,23 +116,21 @@ const renderPicture = (picture) => {
   bigPicture.querySelector('img').alt = picture.description;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
   likesCount.textContent = picture.likes;
-
 };
 
-
-const showBigPicture = (picture) => {
+const showBigPicture = (data) => {
   clearComments();
   openPicture();
-  renderPicture(picture);
-  document.addEventListener('keydown', onEscKeyDown);
+  renderPicture(data);
 
-  comments = picture.comments;
+  comments = data.comments;
   if (comments.length > 0) {
-    renderComments(picture.comments);
+    renderComments(comments);
   }
-  closeButton.addEventListener('click', closePicture);
-  commentsLoader.addEventListener('click', onCommentsLoaderClick);
+  document.addEventListener('keydown', onEscKeyDown);
 };
 
+closeButton.addEventListener('click', closePicture);
+commentsLoader.addEventListener('click', onCommentsLoaderClick);
 
-export {showBigPicture};
+export { showBigPicture };
