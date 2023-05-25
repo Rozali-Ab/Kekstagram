@@ -10,7 +10,7 @@
 
 import { debounce } from './util.js';
 
-const PICTURES_COUNT = 12;
+const PICTURES_COUNT = 16;
 const Filter = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
