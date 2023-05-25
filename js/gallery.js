@@ -8,7 +8,6 @@
 Количество лайков likes выведите в блок .picture__likes.
 Количество комментариев comments выведите в блок .picture__comments.
 Отрисуйте сгенерированные DOM-элементы в блок .pictures. Для вставки элементов используйте DocumentFragment.
-
 Подключите модуль в проект.*/
 
 import { showBigPicture } from './big-picture.js';
