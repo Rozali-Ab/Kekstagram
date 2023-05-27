@@ -42,6 +42,11 @@ const hashtagField = form.querySelector('.text__hashtags');
 const descriptionField = form.querySelector('.text__description');
 const submitButton = form.querySelector('.img-upload__submit');
 
+const fileChooser = document.querySelector('.img-upload__input');
+const previewImage = document.querySelector('.img-upload__preview img');
+const previewEffects = document.querySelectorAll('.effects__preview');
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
 const MAX_HASHTAG_COUNT = 5;
 const MIN_HASHTAG_LENGTH = 2;
 const MAX_HASHTAG_LENGTH = 20;
@@ -79,6 +84,24 @@ function onEscKeyDown (evt) {
     closeModal();
   }
 }
+
+const isValidTypeImg = (file) => {
+  const fileName = file.name.toLowerCase();
+  return FILE_TYPES.some((it) => fileName.endsWith(it));
+};
+
+const onFileInputChange = () => {
+  const file = fileChooser.files[0];
+
+  if (file && isValidTypeImg(file)) {
+    previewImage.src = URL.createObjectURL(file);
+    previewEffects.forEach((effect) => {
+      effect.style.backgroundImage = `url('${previewImage.src}')`;
+    });
+  }
+
+  showModal();
+};
 
 const startsWithHash = (string) => string[0] === '#';
 
@@ -134,7 +157,7 @@ const setPictureFormSubmit = (cb) => {
   });
 };
 
-fileField.addEventListener('change', showModal);
+fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', closeModal);
 
 export{ setPictureFormSubmit, closeModal };
