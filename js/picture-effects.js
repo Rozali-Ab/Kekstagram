@@ -80,21 +80,22 @@ const EFFECTS = [
 ];
 const DEFAULT_EFFECT = EFFECTS[0];
 
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: DEFAULT_EFFECT.min,
+    max: DEFAULT_EFFECT.max,
+  },
+  start: DEFAULT_EFFECT.max,
+  step: 1,
+  connect: 'lower',
+});
+
 function changePreviewImageEffect () {
   let chosenEffect = DEFAULT_EFFECT;
   sliderElement.classList.add('hidden');
   previewImage.style = '';
   previewImage.className = '';
-
-  noUiSlider.create(sliderElement, {
-    range: {
-      min: DEFAULT_EFFECT.min,
-      max: DEFAULT_EFFECT.max,
-    },
-    start: DEFAULT_EFFECT.max,
-    step: 1,
-    connect: 'lower',
-  });
 
   const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
